@@ -1,11 +1,11 @@
 Package: ContagionTest
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Implements Network Contagion Test
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Author: Rebekah Fyfe
+Maintainer: The package maintainer <rjf5775@psu.edu>
+Description: 
+    This packages has functions designed to make implementation of the network contagion test described in Shalizi and Thomas (2011) easier. It is extended from Uppala and Desmarais (2022).
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
