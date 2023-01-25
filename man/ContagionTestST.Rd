@@ -15,3 +15,15 @@ A dataframe of coefficients
 \description{
 Shalizi and Thomas (2011) Contagion Test
 }
+\examples{
+# Transposing polityData to fit correct format (a column for each year, a row for each node)
+polity90 <- as.data.frame(t(as.matrix(polityData)))
+# getting rid of the names
+politynames <- polity90[1,]
+polity90 <- polity90[-1,]
+#converting all values to numeric
+polity90 <- apply(polity90, 2, as.numeric)
+#running a single contagion test on the data
+ContagionTestST(polity90)
+
+}

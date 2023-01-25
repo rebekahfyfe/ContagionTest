@@ -10,8 +10,12 @@ allYears(df)
 \item{df}{A dataframe with three columns denoting nodes, years, and values, respectively}
 }
 \value{
-A dataframe
+A dataframe with three columns (node, year, and value)
 }
 \description{
 Subset data so only nodes with observations in each year are included
+}
+\examples{
+allYears(polityData)
+
 }

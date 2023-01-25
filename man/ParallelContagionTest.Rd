@@ -4,18 +4,30 @@
 \alias{ParallelContagionTest}
 \title{Run a parallelized network contagion test}
 \usage{
-ParallelContagionTest(df, iterations, cores)
+ParallelContagionTest(df, iterations, cores = 1)
 }
 \arguments{
 \item{df}{A dataframe with a column of nodes, a column of years, and a column of values}
 
 \item{iterations}{An integer denoting how many iterations of the test should be run}
 
-\item{cores}{An integer denoting how many cores to use}
+\item{cores}{An integer denoting how many cores to use, default is 1}
 }
 \value{
-A dataframe
+A dataframe with the coefficients from the contagion test
 }
 \description{
 Run a parallelized network contagion test
+}
+\examples{
+# Transposing polityData to fit correct format (a column for each year, a row for each node)
+polity90 <- as.data.frame(t(as.matrix(polityData)))
+# getting rid of the names
+politynames <- polity90[1,]
+polity90 <- polity90[-1,]
+#converting all values to numeric
+polity90 <- apply(polity90, 2, as.numeric)
+#running parallelized contagion tests on the data
+ParallelContagionTest(df = polity90, iterations = 10000, cores = 3)
+
 }

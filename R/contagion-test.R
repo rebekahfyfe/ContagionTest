@@ -7,6 +7,16 @@
 #' @export
 #'
 #' @examples
+#' # Transposing polityData to fit correct format (a column for each year, a row for each node)
+#' polity90 <- as.data.frame(t(as.matrix(polityData)))
+#' # getting rid of the names
+#' politynames <- polity90[1,]
+#' polity90 <- polity90[-1,]
+#' #converting all values to numeric
+#' polity90 <- apply(polity90, 2, as.numeric)
+#' #running a single contagion test on the data
+#' ContagionTestST(polity90)
+#'
 ContagionTestST <- function(df){
   #randomly assigning each observation to one of two bins
   j <- sample(c(1, 2), size = length(df[, 1]), replace = TRUE) #produces unequal bins
