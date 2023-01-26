@@ -23,7 +23,25 @@ ParallelContagionTest <- function(df, iterations, cores = 1){
   myCluster <- parallel::makeCluster(cores, # number of cores to use
                                      type = "PSOCK") # type of cluster
   doParallel::registerDoParallel(myCluster)
-  results <- foreach(n = 1:iterations, .combine = "rbind") %do% ContagionTestST(df)
+  results <- foreach(n = 1:iterations, .combine = "rbind") %dopar% {
+    j <- sample(c(1, 2), size = length(df[, 1]), replace = TRUE) #produces unequal bins
+    Yj1 <- df[, j == 1]
+    Yj2 <- df[, j == 2]
+
+    j1mean <- apply(Yj1, 1, mean)
+    j2mean <- apply(Yj2, 1, mean)
+    j1mean <- diff(j1mean, 1)   # taking the difference between Y1 and Y0 for stationarity
+    j2mean <- diff(j2mean, 2)   # taking the difference between Y1 and Y0 for stationarity
+    j1mean.t <- j1mean[2:(length(j1mean))]
+    j2mean.t <- j2mean[2:(length(j2mean))]
+
+    j1mean.tm1 = j1mean[1:(length(j1mean)-1)]
+    j2mean.tm1 = j2mean[1:(length(j2mean)-1)]
+
+    regmod <- lm(c(j1mean.t, j2mean.t) ~ c(j1mean.tm1, j2mean.tm1) +
+                   c(j2mean.tm1, j1mean.tm1))
+    return(coefficients(regmod))
+  }
   parallel::stopCluster(myCluster)
   return(results)
 
