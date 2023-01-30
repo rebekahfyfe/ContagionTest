@@ -2,7 +2,7 @@
 % Please edit documentation in R/subset-all-years.R
 \name{allYears}
 \alias{allYears}
-\title{Subset data so only nodes with observations in each year are included}
+\title{Subset data so only nodes with observations in every year are included}
 \usage{
 allYears(df)
 }
@@ -13,7 +13,7 @@ allYears(df)
 A dataframe with three columns (node, year, and value)
 }
 \description{
-Subset data so only nodes with observations in each year are included
+Subset data so only nodes with observations in every year are included
 }
 \examples{
 allYears(polityData)

@@ -7,15 +7,23 @@
 PValsParallel(df, iterations, cores = 1)
 }
 \arguments{
-\item{df}{A dataframe of values}
+\item{df}{A dataframe of time series values. Should be formatted such that each column contains values for a unique year. Each row is a different node.}
 
-\item{iterations}{An integer denoting number of iterations}
+\item{iterations}{An integer denoting number of iterations to be run. Default is 100}
 
-\item{cores}{An integer denoting number of cores to run the parallelization on}
+\item{cores}{An integer denoting number of cores to run the parallelization on. Default is 1.}
 }
 \value{
-A numeric vector of p-values
+A numeric vector of p-values, length is the same as the number of iterations
 }
 \description{
 Parallelized p-value generation
+}
+\examples{
+#using cleaning function to get data in the proper format
+polity <- cleaning(polityData)
+
+#200 iterations run on 2 cores
+PValsParallel(df = polity, iterations = 200, cores = 2)
+
 }

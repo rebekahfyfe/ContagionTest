@@ -1,5 +1,5 @@
 
-#' Subset data so only nodes with observations in each year are included
+#' Subset data so only nodes with observations in every year are included
 #'
 #' @param df A dataframe with three columns denoting nodes, years, and values, respectively
 #'
