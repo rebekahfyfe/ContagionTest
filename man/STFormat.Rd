@@ -10,7 +10,7 @@ STFormat(df)
 \item{df}{A dataframe where the first column contains the nodes (such as countries). The remaining columns each contain values for a single year.}
 }
 \value{
-A dataframe with labels removed. Columns are unique years and rows are unique nodes.
+A dataframe with labels removed. Columns are unique nodes and rows are unique years.
 }
 \description{
 A function to transform data so it is in the proper format to be used with other functions in this package.

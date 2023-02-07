@@ -4,7 +4,7 @@
 \alias{ParallelContagionTest}
 \title{Run a parallelized network contagion test}
 \usage{
-ParallelContagionTest(df, iterations, cores = 1)
+ParallelContagionTest(df, iterations, cores = 1, stationary = FALSE)
 }
 \arguments{
 \item{df}{A dataframe with a column of nodes, a column of years, and a column of values}
