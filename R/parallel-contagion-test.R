@@ -19,19 +19,23 @@
 #' #running parallelized contagion tests on the data
 #' ParallelContagionTest(df = polity90, iterations = 10000, cores = 3)
 #'
-ParallelContagionTest <- function(df, iterations, cores = 1){
+ParallelContagionTest <- function(df, iterations, cores = 1, stationary = FALSE){
   myCluster <- parallel::makeCluster(cores, # number of cores to use
                                      type = "PSOCK") # type of cluster
   doParallel::registerDoParallel(myCluster)
   results <- foreach(n = 1:iterations, .combine = "rbind") %dopar% {
-    j <- sample(c(1, 2), size = length(df[, 1]), replace = TRUE) #produces unequal bins
+    j <- sample(c(1, 2), size = ncol(df), replace = TRUE) #produces unequal bins
     Yj1 <- df[, j == 1]
     Yj2 <- df[, j == 2]
 
     j1mean <- apply(Yj1, 1, mean)
     j2mean <- apply(Yj2, 1, mean)
-    j1mean <- diff(j1mean, 1)   # taking the difference between Y1 and Y0 for stationarity
-    j2mean <- diff(j2mean, 2)   # taking the difference between Y1 and Y0 for stationarity
+    #if stationary, do this
+    if(stationary == FALSE){
+      j1mean <- diff(j1mean, 1)   # taking the difference between Y1 and Y0 for stationarity
+      j2mean <- diff(j2mean, 2)   # taking the difference between Y1 and Y0 for stationarity
+    }
+    #if not stationary, do this
     j1mean.t <- j1mean[2:(length(j1mean))]
     j2mean.t <- j2mean[2:(length(j2mean))]
 
