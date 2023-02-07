@@ -10,6 +10,7 @@
 #' allYears(polityData)
 #'
 allYears <- function(df){
+  require(tidyr)
   colnames(df) <- c("node", "year", "value")
   nodes <- table(df$node)
   totalYear <- length(unique(df$year))

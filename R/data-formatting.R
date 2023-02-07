@@ -3,7 +3,7 @@
 #'
 #' @param df A dataframe where the first column contains the nodes (such as countries). The remaining columns each contain values for a single year.
 #'
-#' @return A dataframe with labels removed. Columns are unique years and rows are unique nodes.
+#' @return A dataframe with labels removed. Columns are unique nodes and rows are unique years.
 #' @export
 #'
 #' @examples
