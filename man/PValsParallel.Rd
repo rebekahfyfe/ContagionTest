@@ -4,7 +4,7 @@
 \alias{PValsParallel}
 \title{Parallelized p-value generation}
 \usage{
-PValsParallel(df, iterations, cores = 1, stationary = FALSE)
+PValsParallel(df, iterations, cores = 1, difference = TRUE, threshold = 0.1)
 }
 \arguments{
 \item{df}{A dataframe of time series values. Should be formatted such that each column contains values for a unique year. Each row is a different node.}
@@ -13,7 +13,9 @@ PValsParallel(df, iterations, cores = 1, stationary = FALSE)
 
 \item{cores}{An integer denoting number of cores to run the parallelization on. Default is 1.}
 
-\item{stationary}{A binary indicator for whether df contains stationary data. Default is FALSE.}
+\item{difference}{A binary indicator for whether df should be differenced. Default is TRUE.}
+
+\item{threshold}{A threshold value for conducting a unit root test. If conducting a unit root test on df returns a p-value less than this value, the data will be differenced. Default is o.1.}
 }
 \value{
 A numeric vector of p-values, length is the same as the number of iterations
