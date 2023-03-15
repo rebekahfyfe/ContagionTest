@@ -23,6 +23,7 @@ PValsParallel <- function(df, iterations, cores = 1, difference = TRUE, threshol
   myCluster <- parallel::makeCluster(cores, # number of cores to use
                                      type = "PSOCK") # type of cluster
   doParallel::registerDoParallel(myCluster)
+  printStat <- 0
   results <- foreach(n = 1:iterations, .combine = "rbind", .packages = "plm") %dopar% {
     if(difference == TRUE){
       node_sd <- apply(df, 2, sd)
@@ -36,9 +37,11 @@ PValsParallel <- function(df, iterations, cores = 1, difference = TRUE, threshol
         bindat <- diff(bindat, 1)
         t <- plm::purtest(bindat)
         pvals <-  t$statistic$p.value
-        return(pvals)
+        full <- append(pvals, printStat, after = 0)
+        return(full)
       }
       else{
+        printStat <- 1 #change print statement
         ## do this if stationary
         binindex <- sample(c(1, 2), size = ncol(df), replace = T)
         bin1 <- df[, binindex == 1]
@@ -46,9 +49,12 @@ PValsParallel <- function(df, iterations, cores = 1, difference = TRUE, threshol
         bindat <- cbind(apply(bin1, 1, mean), apply(bin2, 1, mean))
         t <- plm::purtest(bindat)
         pvals <-  t$statistic$p.value
-        return(pvals)
+        full <- append(pvals, printStat, after = 0)
+        return(full)
+        #return(pvals)
       }
     } else {
+      printStat <- 1 #change print statement
       ## do this if stationary
       binindex <- sample(c(1, 2), size = ncol(df), replace = T)
       bin1 <- df[, binindex == 1]
@@ -56,10 +62,14 @@ PValsParallel <- function(df, iterations, cores = 1, difference = TRUE, threshol
       bindat <- cbind(apply(bin1, 1, mean), apply(bin2, 1, mean))
       t <- plm::purtest(bindat)
       pvals <-  t$statistic$p.value
-      return(pvals)
+      full <- append(pvals, printStat, after = 0)
+      return(full)
+      #return(pvals)
     }
   }
   parallel::stopCluster(myCluster)
-  results2 <- sapply(results, "[[", 1)
-  return(results2)
+  ifelse(results[[1]] == 0, print("Took 1st difference"), print("Did not take 1st difference"))
+  results <- results[, -1]
+  #results2 <- sapply(results, "[[", 1)
+  return(results)
 }
