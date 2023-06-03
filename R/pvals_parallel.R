@@ -18,7 +18,7 @@
 #' #200 iterations run on 2 cores
 #' PValsParallel(df = polity, iterations = 200, cores = 2)
 #'
-PValsParallel <- function(df, iterations, cores = 1, difference = TRUE, threshold = 0.1){
+pvals_parallel <- function(df, iterations, cores = 1, difference = TRUE, threshold = 0.1){
   require(foreach)
   myCluster <- parallel::makeCluster(cores, # number of cores to use
                                      type = "PSOCK") # type of cluster

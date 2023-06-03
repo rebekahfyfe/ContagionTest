@@ -14,7 +14,7 @@
 #' #running parallelized contagion tests on the data
 #' ParallelContagionTest(df = polity90, iterations = 10000, cores = 3, stationary = FALSE)
 #'
-ParallelContagionTest <- function(df, iterations, cores = 1, difference = TRUE, threshold = 0.1){
+pc_test <- function(df, iterations, cores = 1, difference = TRUE, threshold = 0.1){
   require(foreach)
   myCluster <- parallel::makeCluster(cores, # number of cores to use
                                      type = "PSOCK") # type of cluster
@@ -22,7 +22,7 @@ ParallelContagionTest <- function(df, iterations, cores = 1, difference = TRUE, 
   printStat <- 0
   results <- foreach(n = 1:iterations, .combine = "rbind") %dopar% {
     if(difference == TRUE){
-      node_sd <- apply(df, 2, sd)
+      node_sd <- apply(df, 2, sd, na.rm = T)
       x <- plm::purtest(df[, node_sd > 0], test = "hadri", exo = "intercept")
       if(x$statistic$p.value < threshold){
         #for nonstationary data
@@ -30,10 +30,10 @@ ParallelContagionTest <- function(df, iterations, cores = 1, difference = TRUE, 
         Yj1 <- df[, j == 1]
         Yj2 <- df[, j == 2]
 
-        j1mean <- apply(Yj1, 1, mean)
-        j2mean <- apply(Yj2, 1, mean)
+        j1mean <- apply(Yj1, 1, mean, na.rm = T)
+        j2mean <- apply(Yj2, 1, mean, na.rm = T)
         j1mean <- diff(j1mean, 1)   # taking the difference between Y1 and Y0 for stationarity
-        j2mean <- diff(j2mean, 2)   # taking the difference between Y1 and Y0 for stationarity
+        j2mean <- diff(j2mean, 1)   # taking the difference between Y1 and Y0 for stationarity
         j1mean.t <- j1mean[2:(length(j1mean))]
         j2mean.t <- j2mean[2:(length(j2mean))]
 
@@ -52,8 +52,8 @@ ParallelContagionTest <- function(df, iterations, cores = 1, difference = TRUE, 
           Yj1 <- df[, j == 1]
           Yj2 <- df[, j == 2]
 
-          j1mean <- apply(Yj1, 1, mean)
-          j2mean <- apply(Yj2, 1, mean)
+          j1mean <- apply(Yj1, 1, mean, na.rm = T)
+          j2mean <- apply(Yj2, 1, mean, na.rm = T)
 
           j1mean.t <- j1mean[2:(length(j1mean))]
           j2mean.t <- j2mean[2:(length(j2mean))]
@@ -75,8 +75,8 @@ ParallelContagionTest <- function(df, iterations, cores = 1, difference = TRUE, 
       Yj1 <- df[, j == 1]
       Yj2 <- df[, j == 2]
 
-      j1mean <- apply(Yj1, 1, mean)
-      j2mean <- apply(Yj2, 1, mean)
+      j1mean <- apply(Yj1, 1, mean, na.rm = T)
+      j2mean <- apply(Yj2, 1, mean, na.rm = T)
 
       j1mean.t <- j1mean[2:(length(j1mean))]
       j2mean.t <- j2mean[2:(length(j2mean))]
