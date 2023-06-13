@@ -7,6 +7,7 @@
 #' @param mean.ycoord The y-coordinate for where the mean value should be displayed on the graph. Default is 1.
 #' @param pval.xcoord The x-coordinate for where the p-value should be displayed on the graph. Default is 0.
 #' @param pval.ycoord The y-coordinate for where the p-value should be displayed on the graph. Default is 0.
+#' @param title The title to be displayed on the plot. Default is an empty string.
 #'
 #' @return
 #' @export
