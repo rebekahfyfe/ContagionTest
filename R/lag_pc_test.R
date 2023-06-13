@@ -64,7 +64,7 @@ lag_pc_test <- function(df, iterations, cores = 1, difference = TRUE, threshold 
   }
   parallel::stopCluster(myCluster)
   ifelse(results[[1]] == 0, print("Took 1st difference"), print("Did not take 1st difference"))
-  results <- results[, -1]
+  results <- results[,-1]
   return(results)
 }
 

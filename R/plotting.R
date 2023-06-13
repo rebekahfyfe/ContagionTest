@@ -12,16 +12,19 @@
 #' @export
 #'
 #' @examples
-density_graph <- function(model, n, mean.xcoord = 0, mean.ycoord = 1, pval.xcoord = 0, pval.ycoord = 0){
+density_graph <- function(model, n, mean.xcoord = 0, mean.ycoord = 1,
+                          pval.xcoord = 0, pval.ycoord = 0, title = ""){
+  require(ggplot2)
+  model <- as.data.frame(model)
   mean <- mean(model[, 3]) ## input this in the plot below
   mean <- round(mean, digits = 3)
   # Significance of the signal, proportion of means less than 0
   pval <- sum(model[, 3] < 0) / n  ## pvalue
   pval <- round(pval, digits = 3)
   ggplot(model, aes(x = model[, 3])) +
-    #ggtitle("(45 Days)") +
     xlab("Contagion Signal") +
     ylab("Density") +
+    ggtitle(title) +
     theme_light() +
     geom_density(fill = "lightgrey", color = "black") +
     geom_vline(aes(xintercept = mean), colour = "black") +
