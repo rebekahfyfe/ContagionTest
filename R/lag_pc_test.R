@@ -7,6 +7,7 @@
 #' @param difference A binary indicator for whether df should be differenced. Default is TRUE.
 #' @param threshold A threshold value for conducting a unit root test. If conducting a unit root test on df returns a p-value less than this value, the data will be differenced. Default is 0.1.
 #' @param lagWin An integer indicating the lag window to be used. All the values within that window are averaged to get a single value. Default is 1.
+#' @param missingData A binary indicator of whether 'df' includes missing data. If set to TRUE, ndiffs() will be used to test for stationarity.
 #'
 #' @return A dataframe with the coefficients from the contagion test
 #' @export
