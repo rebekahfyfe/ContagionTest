@@ -13,8 +13,7 @@ RoxygenNote: 7.2.3
 Imports: 
     doParallel,
     foreach,
-    plm,
-    punitroots
+    plm
 Depends: 
     R (>= 2.10)
 Suggests: 
