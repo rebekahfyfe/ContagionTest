@@ -12,7 +12,7 @@ STFormat <- function(df){
   subsetDF <- as.data.frame(t(as.matrix(df)))
   subsetDF <- subsetDF[-1, ]
   subsetDF <- apply(subsetDF, 2, as.numeric)
-  return(subsetDF)
+  return(as.data.frame(subsetDF))
 }
 
 

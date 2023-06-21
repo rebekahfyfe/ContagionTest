@@ -16,9 +16,10 @@
 #' #running parallelized contagion tests on the data
 #' ParallelContagionTest(df = polity90, iterations = 10000, cores = 3, difference = TRUE)
 #'
-lag_pc_test <- function(df, iterations, cores = 1, difference = TRUE, threshold = 0.1, lagWin = 1, missingData = FALSE){
+lag_pc_test <- function(df, iterations = 1000, cores = 1, difference = TRUE, threshold = 0.1, lagWin = 1, missingData = FALSE){
   require(foreach)
   require(forecast)
+  require(doRNG)
   myCluster <- parallel::makeCluster(cores, # number of cores to use
                                      type = "PSOCK") # type of cluster
   doParallel::registerDoParallel(myCluster)
@@ -27,7 +28,8 @@ lag_pc_test <- function(df, iterations, cores = 1, difference = TRUE, threshold 
   if(missingData == TRUE){
     numDif <- mean(apply(df, 2, FUN = forecast::ndiffs))
   }
-  results <- foreach::foreach(n = 1:iterations, .combine = "rbind", .export = c("diff_data", "no_diff_data", "lag_calc")) %dopar% {
+  set.seed(39)
+  results <- foreach(n = 1:iterations, .combine = "rbind", .export = c("diff_data", "no_diff_data", "lag_calc")) %dorng% {
     if(missingData == TRUE){
       if(numDif < 0.5){ #if less than half of the columns require differencing, do not difference the data
         returnList <- no_diff_data(df, lagWin)
@@ -65,8 +67,14 @@ lag_pc_test <- function(df, iterations, cores = 1, difference = TRUE, threshold 
   }
   parallel::stopCluster(myCluster)
   ifelse(results[[1]] == 0, print("Took 1st difference"), print("Did not take 1st difference"))
-  results <- results[,-1]
-  return(results)
+  if(iterations == 1){
+    results <- results[-1]
+    return(results)
+  }
+  else{
+    results <- results[,-1]
+    return(results)
+  }
 }
 
 
