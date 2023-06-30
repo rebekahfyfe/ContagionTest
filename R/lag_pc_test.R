@@ -16,7 +16,7 @@
 #' #running parallelized contagion tests on the data
 #' ParallelContagionTest(df = polity90, iterations = 10000, cores = 3, difference = TRUE)
 #'
-lag_pc_test <- function(df, iterations = 1000, cores = 1, difference = TRUE, threshold = 0.1, lagWin = 1, missingData = FALSE){
+lag_pc_test <- function(df, iterations = 1000, cores = 1, difference = TRUE, threshold = 0.1, lagWin = 1, missingData = FALSE, unitTest = FALSE){
   require(foreach)
   require(forecast)
   require(doRNG)
@@ -28,8 +28,10 @@ lag_pc_test <- function(df, iterations = 1000, cores = 1, difference = TRUE, thr
   if(missingData == TRUE){
     numDif <- mean(apply(df, 2, FUN = forecast::ndiffs))
   }
-  set.seed(39)
-  results <- foreach(n = 1:iterations, .combine = "rbind", .export = c("diff_data", "no_diff_data", "lag_calc")) %dorng% {
+  #set.seed(39)
+  results <- foreach(n = 1:iterations, .combine = "rbind",
+                     .export = c("diff_data", "no_diff_data", "lag_calc"),
+                     .options.RNG = 39) %dorng% {
     if(missingData == TRUE){
       if(numDif < 0.5){ #if less than half of the columns require differencing, do not difference the data
         returnList <- no_diff_data(df, lagWin)
@@ -49,14 +51,13 @@ lag_pc_test <- function(df, iterations = 1000, cores = 1, difference = TRUE, thr
         #x <- plm::purtest(df[, node_sd > 0], test = "hadri", exo = "intercept")
 
         if(x$statistic$p.value < threshold){
-          #for nonstationary data\
+          #for nonstationary data
           returnList <- diff_data(df, lagWin)
           return(returnList)
 
         } else{
           returnList <- no_diff_data(df, lagWin)
           return(returnList)
-          #return(coefficients(regmod))
         }
 
       } else{
@@ -66,7 +67,16 @@ lag_pc_test <- function(df, iterations = 1000, cores = 1, difference = TRUE, thr
     }
   }
   parallel::stopCluster(myCluster)
-  ifelse(results[[1]] == 0, print("Took 1st difference"), print("Did not take 1st difference"))
+  ifelse(results[[1]] == 1, print("Took 1st difference"), print("Did not take 1st difference"))
+  if(unitTest == TRUE){
+    if(iterations == 1){
+      return(results)
+    }
+    else{
+      return(results)
+    }
+  }
+  else{
   if(iterations == 1){
     results <- results[-1]
     return(results)
@@ -75,11 +85,12 @@ lag_pc_test <- function(df, iterations = 1000, cores = 1, difference = TRUE, thr
     results <- results[,-1]
     return(results)
   }
+  }
 }
 
 
 no_diff_data <- function(df, lagWin = 1){
-  printStat <- 1
+  printStat <- 0
   #for stationary data
   j <- sample(c(1, 2), size = ncol(df), replace = TRUE) #produces unequal bins
   Yj1 <- df[, j == 1]
@@ -99,16 +110,14 @@ no_diff_data <- function(df, lagWin = 1){
   regmod <- lm(c(j1mean.t, j2mean.t) ~ c(j1mean.tm1, j2mean.tm1) +
                  c(j2mean.tm1, j1mean.tm1))
   results <- coefficients(regmod)
-  #results <- as.data.frame(results)
-  #rownames(results) <- c("intercept","t-1coef","counterpart")
+  #returnList <- append(regmod, printStat, after = 0)
   returnList <- append(results, printStat, after = 0)
   return(returnList)
-  #return(results)
 }
 
 
 diff_data <- function(df, lagWin = 1) {
-  printStat <- 0
+  printStat <- 1
   #for nonstationary data
   j <- sample(c(1, 2), size = ncol(df), replace = TRUE) #produces unequal bins
   Yj1 <- df[, j == 1]
@@ -130,9 +139,12 @@ diff_data <- function(df, lagWin = 1) {
   regmod <- lm(c(j1mean.t, j2mean.t) ~ c(j1mean.tm1, j2mean.tm1) +
                  c(j2mean.tm1, j1mean.tm1))
   results <- coefficients(regmod)
+  #returnList <- append(regmod, printStat, after = 0)
   returnList <- append(results, printStat, after = 0)
   return(returnList)
 }
+
+
 
 lag_calc <- function(df, lagWin){
   indexes <- (lagWin + 1):length(df)
