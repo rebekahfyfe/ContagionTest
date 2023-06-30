@@ -6,12 +6,13 @@
 \usage{
 lag_pc_test(
   df,
-  iterations,
+  iterations = 1000,
   cores = 1,
   difference = TRUE,
   threshold = 0.1,
   lagWin = 1,
-  missingData = FALSE
+  missingData = FALSE,
+  unitTest = FALSE
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ lag_pc_test(
 \item{lagWin}{An integer indicating the lag window to be used. All the values within that window are averaged to get a single value. Default is 1.}
 
 \item{missingData}{A binary indicator of whether 'df' includes missing data. If set to TRUE, ndiffs() will be used to test for stationarity.}
+
+\item{unitTest}{A binary indicator of whether the function is being run in a unit test. Default is FALSE and should rarely be set to TRUE.}
 }
 \value{
 A dataframe with the coefficients from the contagion test
