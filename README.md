@@ -1,6 +1,6 @@
 # ContagionTest
 ## About
-R package for the network contagion test described in Shalizi and Thomas (2011).
+R package for the network contagion test described in Shalizi and Thomas (2011). Find the most recent draft of the paper in which we present the first applications of this software [here](https://pennstateoffice365-my.sharepoint.com/:b:/g/personal/bbd5087_psu_edu/EQ0lxeGC9qVKv4G12p4Y0jUBo72PLf748lHDoH-dTd7dUg?e=gh5cHN).
 
 ## Installation
 The package can be installed from GitHub by using devtools.
