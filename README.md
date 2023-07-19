@@ -11,6 +11,9 @@ devtools::install_github("rebekahfyfe/ContagionTest")
 
 ## Example
 ```{r}
+# load package
+library(ContagionTest)
+
 # load polity data included in package
 data(polityData)
 
@@ -18,7 +21,7 @@ data(polityData)
 polityData <- STFormat(polityData)
 
 # run split-halves test
-results <- lag_pc_test(data = polityData, iterations = 100, cores = 2, difference = T, threshold = 0.1, lagWin = 1, missingData = F)
+results <- lag_pc_test(df = polityData, iterations = 100, cores = 2, difference = T, threshold = 0.1, lagWin = 1, missingData = F)
 
 # create a dataframe with results
 results <- as.data.frame(results)
