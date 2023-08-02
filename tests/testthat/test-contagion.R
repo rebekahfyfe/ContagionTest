@@ -52,8 +52,6 @@ test_that("right test non stationary", {
   x9 <- runif(100, 0, 1) * seq(1:100)
   x10 <- runif(100, 0, 1) * seq(1:100)
   dfS <- data.frame(x1, x2, x3, x4, x5, x6, x7, x8, x9, x10)
-  #set.seed(39)
-  #diff <- round(diff_data(dfS, 1)[-1], 2)
   set.seed(39)
   main <- round(lag_pc_test(dfS, 1, 1, T, unitTest = T)[1], 2)
   set.seed(39)
@@ -61,3 +59,60 @@ test_that("right test non stationary", {
   expect_equal(main, diff)
 })
 
+test_that("missing data parameter works stationary", {
+  set.seed(39)
+  x1 <- rbinom(n = 100, size = 1, prob = 0.5)
+  ind1 <- sample(100, 50)
+  x1[ind1] <- NA
+  x2 <- rbinom(n = 100, size = 1, prob = 0.5)
+  ind2 <- sample(100, 50)
+  x2[ind2] <- NA
+  x3 <- rbinom(n = 100, size = 1, prob = 0.5)
+  x4 <- rbinom(n = 100, size = 1, prob = 0.5)
+  x5 <- rbinom(n = 100, size = 1, prob = 0.5)
+  dfS <- data.frame(x1, x2, x3, x4, x5)
+  main <- lag_pc_test(dfS, 1, 1, T, 0.1, 1, T, T)
+  expect_equal(main[[1]], 0)
+})
+
+
+test_that("missing data parameter works nonstationary", {
+  set.seed(39)
+  x6 <- runif(100, 0, 1) * seq(1:100)
+  ind6 <- sample(100, 50)
+  x6[ind6] <- NA
+  x7 <- runif(100, 0, 1) * seq(1:100)
+  ind7 <- sample(100, 50)
+  x7[ind7] <- NA
+  x8 <- runif(100, 0, 1) * seq(1:100)
+  ind8 <- sample(100, 15)
+  x8[ind8] <- NA
+  x9 <- runif(100, 0, 1) * seq(1:100)
+  x10 <- runif(100, 0, 1) * seq(1:100)
+  dfS <- data.frame(x6, x7, x8, x9, x10)
+  main <- lag_pc_test(dfS, 1, 1, T, 0.1, 1, T, T)
+  expect_equal(main[[1]], 1)
+})
+
+test_that("missing data parameter works", {
+  set.seed(39)
+  x1 <- rbinom(n = 100, size = 1, prob = 0.5)
+  ind1 <- sample(100, 15)
+  x1[ind1] <- NA
+  x2 <- rbinom(n = 100, size = 1, prob = 0.5)
+  ind2 <- sample(100, 15)
+  x2[ind2] <- NA
+  x3 <- rbinom(n = 100, size = 1, prob = 0.5)
+  x4 <- rbinom(n = 100, size = 1, prob = 0.5)
+  x5 <- rbinom(n = 100, size = 1, prob = 0.5)
+  x6 <- runif(100, 0, 1) * seq(1:100)
+  ind6 <- sample(100, 15)
+  x6[ind6] <- NA
+  x7 <- runif(100, 0, 1) * seq(1:100)
+  x8 <- runif(100, 0, 1) * seq(1:100)
+  x9 <- runif(100, 0, 1) * seq(1:100)
+  x10 <- runif(100, 0, 1) * seq(1:100)
+  dfS <- data.frame(x1, x2, x3, x4, x5, x6, x7, x8, x9, x10)
+  main <- lag_pc_test(dfS, 1, 1, T, 0.1, 1, T, T)
+  expect_equal(main[[1]], 1)
+})
