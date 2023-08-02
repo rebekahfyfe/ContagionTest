@@ -17,7 +17,8 @@ density_graph <- function(model, n, mean.xcoord = 0, mean.ycoord = 1,
                           pval.xcoord = 0, pval.ycoord = 0, title = ""){
   require(ggplot2)
   model <- as.data.frame(model)
-  mean <- mean(model[, 3]) ## input this in the plot below
+  # Mean of the results from the n iterations of the SH test
+  mean <- mean(model[, 3])
   mean <- round(mean, digits = 3)
   # Significance of the signal, proportion of means less than 0
   pval <- sum(model[, 3] < 0) / n  ## pvalue

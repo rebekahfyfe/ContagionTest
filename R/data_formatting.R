@@ -7,7 +7,7 @@
 #' @export
 #'
 #' @examples
-#' df <- cleaning(polityData)
+#' df <- STFormat(polityData)
 STFormat <- function(df){
   subsetDF <- as.data.frame(t(as.matrix(df)))
   subsetDF <- subsetDF[-1, ]
@@ -24,14 +24,14 @@ STFormat <- function(df){
 #' @export
 #'
 #' @examples
-#' allYears(polityData)
+#' allTime(polityData)
 #'
-allYears <- function(df){
+allTime <- function(df){
   require(tidyr)
   colnames(df) <- c("node", "year", "value")
   nodes <- table(df$node)
   totalYear <- length(unique(df$year))
-  subsetDF <- df[(df$node %in% names(nodes[nodes == totalYear])), ]
+  subsetDF <- df[(df$node %in% names(nodes[nodes == totalYear])), ] #selecting only nodes that have a value for every time period
   subsetDF <- spread(subsetDF, year, value)
   return(subsetDF)
 }
