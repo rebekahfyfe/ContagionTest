@@ -35,5 +35,5 @@ pval <- sum(results$counterpart < 0) / 100  ## pvalue
 pval <- round(pval, digits = 3)
 
 # graph results
-density_graph(results, mean, pval, mean, 1, mean, 0)
+density_graph(results, 100, mean, 1, mean, 0)
 ```
